@@ -15,3 +15,5 @@ This application runs the app like a browser.
 
 - `$ npm install`
 - `$ npm start`
+
+![Electron](http://cdn.totaljs.com/images/code-electron-02.jpg)
