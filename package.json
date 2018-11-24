@@ -1,0 +1,22 @@
+{
+  "name": "Code",
+  "version": "1.0.0",
+  "description": "Code application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/totaljs/openplatform-code",
+  "keywords": [
+    "code",
+    "editor"
+  ],
+  "author": "Peter Širka",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^3.0.10"
+  },
+  "dependencies": {
+    "electron-window-state": "^5.0.2"
+  }
+}
