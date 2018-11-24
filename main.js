@@ -41,11 +41,3 @@ function createWindow () {
 app.on('ready', createWindow);
 app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit());
 app.on('activate', () => mainWindow == null && createWindow());
-
-app.on('ready', () => {
-//	electron.globalShortcut.register('CommandOrControl+N', createWindow);
-//	electron.globalShortcut.register('Command+R', function() {});
-//	electron.globalShortcut.register('Command+W', function() {
-//		mainWindow.webContents.send('tabs.close');
-//	});
-});
