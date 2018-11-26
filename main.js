@@ -25,7 +25,7 @@ electron.ipcMain.on('getPath', function(e, arg) {
 
 function createWindow () {
 	var mainWindowState = windowStateKeeper({ defaultWidth: 1280, defaultHeight: 768 });
-	var window = new BrowserWindow({ icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, webPreferences: { nodeIntegration: true }});
+	var window = new BrowserWindow({ autoHideMenuBar: true, icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, webPreferences: { nodeIntegration: true }});
 	window.on('closed', function () {
 		if (mainWindow == this)
 			mainWindow = null;
