@@ -44,6 +44,8 @@ function createWindow () {
 		submenu: [
 			{ label: 'About Application', selector: 'orderFrontStandardAboutPanel:' },
 			{ type: 'separator' },
+			{ label: 'New window', accelerator: 'Command+N', click: function() { createWindow(); }},
+			{ label: 'Developer tools', accelerator: 'F12', click: function() { mainWindow.toggleDevTools(); }},
 			{ label: 'Quit', accelerator: 'Command+Q', click: function() { app.quit(); }}
 		]}, {
 		label: 'Edit',
