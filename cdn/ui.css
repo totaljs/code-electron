@@ -1,0 +1,45 @@
+.ui-panel { background-color: white; margin: 0 0 0 auto; transform: scale(0.8); transition: all 0.2s; opacity: 0; width: 100%; }
+.ui-panel-noscroll, .ui-panel-noscroll body { overflow: hidden; }
+.ui-panel-container { width: 100%; position: fixed; left: 0; top: 0; bottom: 0; right: 0; background-color: rgba(230,233,237,0.8); z-index: 5; overflow: none; transform-style: preserve-3d; height: 100%; }
+.ui-panel-inline { right: 0; left: auto; background: transparent; }
+.ui-panel-inline .ui-panel { border-left: 1px solid #E0E0E0; background-color: rgba(255,255,255,0.9) }
+.ui-panel-header { height: 60px; }
+.ui-panel-body { overflow-scrolling: touch; overflow-y: auto; }
+.ui-panel-animate .ui-panel { transform: scale(1); opacity: 1; }
+.ui-panel-inline.ui-panel-animate { transition: box-shadow 0.5s; box-shadow: -10px 0 20px rgba(0,0,0,0.02); }
+.ui-panel-title { padding: 0 0 0 20px; font-size: 16px; user-select: none; color: black; background-color: white; border-bottom: 1px solid #E0E0E0; position: absolute; left: 0; right: 0; top: 0; height: 60px; }
+.ui-panel-title .ui-panel-button-close { float: right; cursor: pointer; font-size: 18px; transition: all 0.2s; background: none; border: 0; outline: 0; height: auto; color: red; text-align: center; !important; padding: 0; width: auto; border-left: 1px solid #E0E0E0; width: 60px; height: 60px; }
+.ui-panel-title .ui-panel-button-close:hover { background-color: #EB3324; color: white; }
+.ui-panel-title > span { font-weight: bold; max-width: 70%; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; position: relative; display: inline-block; vertical-align: middle; padding: 18px 0 0 0; }
+.ui-panel-title > .fa { margin: 19px 7px 0 0; float: left; }
+
+input:-ms-input-placeholder, input:-webkit-input-placeholder, input:-moz-input-placeholder { color: silver; }
+input[type="text"]:disabled, input[type="password"]:disabled, select:disabled { background-color: #F0F0F0; cursor: not-allowed; color: silver; }
+input:invalid { box-shadow: none; }
+
+.ui-textbox-container * { box-sizing: border-box; }
+.ui-textbox { height: 32px; border: 1px solid #E0E0E0; border-radius: 2px; position: relative; width: 100%; background-color: white; display: table; }
+.ui-textbox-input { display: table-cell; padding: 8px 2px 0 5px; }
+.ui-textbox-input input { font: normal 14px Arial; border: 0; outline: 0; color: black; width: 100%; background-color: white; margin: 0; padding: 0; appearance: none; border-radius: 0; vertical-align: top; }
+.ui-textbox-control { position: relative; vertical-align: middle; display: table-cell; text-align: center; white-space: nowrap; text-overflow: clip; border-left: 1px solid #E0E0E0; width: 32px; color: black; }
+.ui-textbox .fa-times { color: red; cursor: pointer; }
+.ui-textbox-label { margin-bottom: 5px; font-size: 12px; text-align: left; }
+.ui-textbox-label .fa { margin-right: 5px; }
+.ui-textbox-label { margin-bottom: 5px; font-size: 12px; text-align: left; }
+.ui-textbox-label .fa { margin-right: 5px; }
+.ui-textbox-required .ui-textbox-label { font-weight: bold; }
+.ui-textbox-required .ui-textbox-label:before { color: red; content: '***'; margin-right: 5px; }
+.ui-textbox-required .ui-textbox-control { border-color: #D0D0D0; }
+.ui-textbox-required .ui-textbox { border-color: #D0D0D0; }
+.ui-textbox-invalid .ui-textbox { border-color: #E1A1A1 !important; background-color: #FFF3F3 !important; }
+.ui-textbox-invalid input { background-color: #FFF3F3 !important; }
+.ui-textbox-invalid .ui-textbox-control { border-color: #E1A1A1 !important; }
+.ui-textbox .fa-caret-up, .ui-textbox .fa-caret-down { display: block; line-height: 9px; cursor: pointer; }
+.ui-textbox .fa-calendar { cursor: pointer; }
+.ui-textbox-helper { margin-top: 8px; font-size: 11px; color: red; text-align: left; display: none; }
+.ui-textbox-helper-show { display: block; }
+.ui-textbox-container.ui-disabled .ui-textbox { background-color: #F0F0F0; cursor: not-allowed; }
+.ui-textbox-container.ui-disabled .ui-textbox input { background-color: #F0F0F0; }
+
+.ui-right { text-align: right; }
+.ui-center { text-align: center; }
