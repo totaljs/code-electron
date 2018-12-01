@@ -17,6 +17,7 @@
     "electron": "^3.0.10"
   },
   "dependencies": {
-    "electron-window-state": "^5.0.2"
+    "electron-settings": "^3.2.0",
+    "open": "0.0.5"
   }
 }
