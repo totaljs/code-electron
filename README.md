@@ -9,7 +9,7 @@ This application runs the app like a browser.
 - `$ npm install`
 - __macOS__ `$ electron-packager . Code --overwrite --icon icon.icns`
 - __Linux__ `$ electron-packager . Code --overwrite --icon icon.png`
-- __Windows__ `$ electron-packager . Code --overwrite --icon icon.ico`
+- __Windows__ `electron-packager . Code --overwrite --icon icon.ico`
 
 ## How do I run it without building?
 
