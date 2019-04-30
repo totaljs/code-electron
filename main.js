@@ -26,7 +26,9 @@ electron.ipcMain.on('getPath', function(e, arg) {
 
 function createWindow () {
 	var mainWindowState = windowStateKeeper('main');
-	var window = new BrowserWindow({ autoHideMenuBar: true, icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, webPreferences: { nodeIntegration: true, nativeWindowOpen: true }});
+	//  frame: false
+	var window = new BrowserWindow({ autoHideMenuBar: true, darkTheme: true, icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, webPreferences: { nodeIntegration: true, nativeWindowOpen: true }});
+	window.setBackgroundColor('#202020');
 
 	mainWindowState.track(window);
 
