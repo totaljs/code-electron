@@ -88,7 +88,10 @@
 	</div>
 
 	<script>
+
 		CACHEPATH('places', '20 years');
+
+		require('electron').remote.getGlobal('META').url = location.href;
 
 		PLUGIN('app', function(exports) {
 

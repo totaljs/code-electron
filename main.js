@@ -24,10 +24,14 @@ electron.ipcMain.on('getPath', function(e, arg) {
 	e.returnValue = cache[arg.url] || '';
 });
 
+global.META = {
+	version: 1
+};
+
 function createWindow () {
 	var mainWindowState = windowStateKeeper('main');
 	//  frame: false
-	var window = new BrowserWindow({ autoHideMenuBar: true, darkTheme: true, icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, webPreferences: { nodeIntegration: true, nativeWindowOpen: true }});
+	var window = new BrowserWindow({ autoHideMenuBar: true, frame: true, titleBarStyle: 'hidden', icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, webPreferences: { nodeIntegration: true, nativeWindowOpen: true }});
 	window.setBackgroundColor('#202020');
 
 	mainWindowState.track(window);
@@ -61,26 +65,95 @@ function createWindow () {
 	mainWindow.setMenuBarVisibility(false);
 	window.loadFile('index.html');
 
-	var template = [{
-		label: 'Application',
-		submenu: [
-			{ label: 'About Application', selector: 'orderFrontStandardAboutPanel:' },
-			{ type: 'separator' },
-			{ label: 'New window', accelerator: 'CmdOrCtrl+N', click: function() { createWindow(); }},
-			{ label: 'Developer tools', accelerator: 'F12', click: function() { mainWindow.toggleDevTools(); }},
-			{ label: 'Quit', accelerator: 'Command+Q', click: function() { app.quit(); }},
-			{ label: 'Quit', accelerator: 'Alt+F4', click: function() { app.quit(); }}
-		]}, {
-		label: 'Edit',
-		submenu: [
-			{ label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
-			{ label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
-			{ type: 'separator' },
-			{ label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
-			{ label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
-			{ label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
-			{ label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
-		]}
+	var isMac = process.platform === 'darwin';
+
+	const template = [
+		// { role: 'appMenu' }
+		...(isMac ? [{
+			label: app.getName(),
+			submenu: [
+				// { role: 'about' },
+				// { type: 'separator' },
+				{ role: 'services' },
+				{ type: 'separator' },
+				{ label: 'New window', accelerator: 'CmdOrCtrl+N', click: function() { createWindow(); }},
+				{ type: 'separator' },
+				{ role: 'hide' },
+				{ role: 'hideothers' },
+				{ role: 'unhide' },
+				{ type: 'separator' },
+				{ role: 'quit' }
+			]
+		}] : []),
+		{
+			label: 'Edit',
+			submenu: [
+				{ role: 'undo' },
+				{ role: 'redo' },
+				{ type: 'separator' },
+				{ role: 'cut' },
+				{ role: 'copy' },
+				{ role: 'paste' },
+				...(isMac ? [
+					{ role: 'delete' },
+					{ type: 'separator' },
+					{ role: 'selectAll' }
+				] : [
+					{ role: 'delete' },
+					{ type: 'separator' },
+					{ role: 'selectAll' }
+				])
+			]
+		},
+		// { role: 'viewMenu' }
+		{
+			label: 'View',
+			submenu: [
+				{ role: 'forcereload' },
+				{ type: 'separator' },
+				{ type: 'separator' },
+				{ role: 'togglefullscreen' }
+			]
+		},
+		{ role: 'windowMenu' },
+		/*
+		{
+			label: 'Window',
+			submenu: [
+				{ role: 'minimize' },
+				{ role: 'zoom' },
+				...(isMac ? [
+					{ type: 'separator' },
+					{ role: 'front' },
+					{ type: 'separator' },
+					{ role: 'window' }
+				] : [
+					{ role: 'close' }
+				])
+			]
+		},*/
+		{
+			role: 'help',
+			submenu: [
+
+				{
+					label: 'Documentation',
+					click () { electron.shell.openExternalSync('https://wiki.totaljs.com/code/01-welcome/'); }
+				},
+				{
+					label: 'Total.js Platform',
+					click () { electron.shell.openExternalSync('https://www.totaljs.com/'); }
+				},
+				{
+					label: 'Contact us',
+					click () { electron.shell.openExternalSync('https://www.totaljs.com/contact/'); }
+				},
+				{
+					label: 'Support',
+					click () { electron.shell.openExternalSync('https://www.totaljs.com/support/'); }
+				}
+			]
+		}
 	];
 
 	Menu.setApplicationMenu(Menu.buildFromTemplate(template));

@@ -14,10 +14,10 @@
   "author": "Peter Širka",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^3.0.10"
+    "electron": "latest"
   },
   "dependencies": {
-    "electron-settings": "^3.2.0",
-    "open": "0.0.5"
+    "electron-settings": "latest",
+    "open": "latest"
   }
 }
