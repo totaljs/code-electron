@@ -111,6 +111,7 @@ function createWindow () {
 			submenu: [
 				{ role: 'forcereload' },
 				{ type: 'separator' },
+				{ label: 'Developer tools', accelerator: 'F12', click: function() { mainWindow.toggleDevTools() }},
 				{ type: 'separator' },
 				{ role: 'togglefullscreen' }
 			]
