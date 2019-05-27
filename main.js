@@ -28,11 +28,16 @@ global.META = {
 	version: 1
 };
 
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
+process.env.ELECTRON_ENABLE_SECURITY_WARNINGS = false;
+
 function createWindow () {
 	var mainWindowState = windowStateKeeper('main');
 	//  frame: false
-	var window = new BrowserWindow({ autoHideMenuBar: true, frame: true, titleBarStyle: 'hidden', icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, webPreferences: { nodeIntegration: true, nativeWindowOpen: true }});
+	var window = new BrowserWindow({ autoHideMenuBar: true, frame: true, titleBarStyle: 'hidden', icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, webPreferences: { nodeIntegration: true, nativeWindowOpen: true, webviewTag: true }});
 	window.setBackgroundColor('#202020');
+	window && (window.ELECTRON_DISABLE_SECURITY_WARNINGS = true);
+	window && (window.ELECTRON_ENABLE_SECURITY_WARNINGS = false);
 
 	mainWindowState.track(window);
 
