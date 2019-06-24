@@ -7,6 +7,8 @@ const path = require('path');
 const cache = {};
 const { Menu } = require('electron');
 
+app.disableHardwareAcceleration();
+
 let mainWindow;
 
 module.paths.push(path.resolve('node_modules'));
