@@ -10,7 +10,7 @@
 	<link href="cdn/spa.min@16.css" rel="stylesheet" type="text/css" />
 	<link href="cdn/ui.css" rel="stylesheet" type="text/css" />
 	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-	<script src="cdn/spa.min@16.js"></script>
+	<script src="cdn/spa.min@17.js"></script>
 	<script src="cdn/ui.js"></script>
 	<script>if (window.module) module = window.module;</script>
 	<style>
@@ -112,7 +112,7 @@
 				places[index] = b;
 				places[index - 1] = a;
 
-				BIND('places');
+				UPD('places');
 			};
 
 			exports.down = function(el, e) {
@@ -132,7 +132,7 @@
 				places[index] = b;
 				places[index + 1] = a;
 
-				BIND('places');
+				UPD('places');
 			};
 
 			exports.submit = function() {
@@ -147,7 +147,7 @@
 				e.preventDefault();
 				var index = +el.parent().attrd('index');
 				places.splice(index, 1);
-				UPDATE('places');
+				UPD('places');
 			};
 
 			exports.go = function(el) {
