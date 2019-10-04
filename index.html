@@ -14,36 +14,45 @@
 	<script src="cdn/ui.js"></script>
 	<script>if (window.module) module = window.module;</script>
 	<style>
-		html,body { background-color: #202020; color: white; }
+		html,body { background-color: white; color: black; height: 100%; }
 		.m { margin-bottom: 10px; }
 		.padding { padding: 20px; }
-		.link { color: #9AD959; }
-		.app { font-size: 18px; cursor: pointer; padding: 10px 20px; font-weight: bold; position: relative; width: 45%; display: inline-block; text-align: left; margin: 0 20px 10px; border-bottom: 1px solid #303030; }
-		.app:hover { background-color: #303030; }
+		.link { color: #80B44A; }
+		.ui-dark .link { color: #9AD959; }
+		.app { font-size: 18px; cursor: pointer; padding: 10px 20px; font-weight: bold; position: relative; width: 45%; display: inline-block; text-align: left; margin: 0 20px 10px; border-bottom: 1px solid #E0E0E0; }
+		.app:hover { background-color: rgba(100,100,100,0.1); }
 		.app i { margin-right: 5px; }
 		.app > div { font-size: 11px; color: gray; font-weight: normal; }
-		.app > i { margin-right: 0; width: 15px; text-align: center; position: absolute; font-size: 12px; color: #A0A0A0; }
+		.app > i { margin-right: 0; width: 15px; text-align: center; position: absolute; font-size: 12px; color: gray; }
+		.app .fa-pencil { right: 35px; top: 35px; }
+		.app .fa-pencil:hover { color: #9AD959; }
 		.app .fa-times-circle { right: 15px; top: 35px; color: #9B5F5F; }
 		.app .fa-times-circle:hover { color: red; }
 		.app .fa-chevron-up { right: 15px; top: 17px; }
 		.app .fa-chevron-up:hover { color: #9AD959; }
 		.app .fa-chevron-down { right: 15px; top: 53px; }
 		.app .fa-chevron-down:hover { color: #9AD959; }
+		.ui-dark .app { border-bottom-color: #303030; }
+		.ui-dark .app > i { color: #A0A0A0; }
 		.body img { margin: 0 auto; display: block; }
 		.center { text-align: center }
-		h1 { text-align: center; margin: 20px 0 0; font-size: 24px; font-family: Arial; color: white; font-weight: normal; font-weight: normal; }
+		h1 { text-align: center; margin: 20px 0 0; font-size: 24px; font-family: Arial; color: black; font-weight: normal; font-weight: normal; }
+		.ui-dark h1 { color: white; }
 		.link { font-size: 12px; }
 		.link i { margin-right: 5px; }
 		.button { background-color: #9AD959; border: 0; color: white; cursor: pointer; outline: 0; width: 100%; border-radius: 3px; height: 50px; text-transform: uppercase; font-family: Arial; }
 		.button:hover { box-shadow: 0 2px 5px rgba(0,0,0,0.1); opacity: 0.9; }
-		.button:disabled { background-color: #303030; color: silver; cursor: not-allowed; box-shadow: none; opacity: 1; }
+		.button:disabled { background-color: #E0E0E0; color: silver; cursor: not-allowed; box-shadow: none; opacity: 1; }
+		.ui-dark .button:disabled { background-color: #303030; color: gray; }
 		.button .fa, .button .fal, .button .far { margin-right: 5px; }
-		.button-small { height: 32px; font-size: 12px; }
+		.button-small { height: 36px; font-size: 12px; }
 		.b { font-weight: bold; }
 		.m { margin-bottom: 20px; }
-		hr { border-color: #404040; }
+		hr { border-color: #E0E0E0; }
+		.ui-dark hr { border-color: #404040; }
 		body { user-select: none; -webkit-user-select: none; -webkit-app-region: drag; }
 		.center { text-align: center; }
+		.darkmode { position: fixed; right: 20px; top: 20px; }
 
 		@media(min-width: 980px) {
 			.apps { margin-left: 25px; }
@@ -55,7 +64,11 @@
 
 	</style>
 </head>
-<body data-jc="exec" class="ui-dark">
+<body data---="exec" class="ui-dark" data-bind="darkmode__.ui-dark:value||value==null">
+
+	<div class="darkmode">
+		<div data---="togglebutton__darkmode__icontrue:moon"></div>
+	</div>
 
 	<div class="container">
 		<br />
@@ -70,30 +83,33 @@
 		<div data-bind="places__template" class="apps">
 			<script type="text/html">
 				{{ foreach m in value }}
-					<div data-url="{{ m.url }}" data-index="{{ $index }}" class="app exec" data-exec="app/go"><i class="fa fa-chevron-up exec" data-exec="app/up"></i><i class="fa fa-chevron-down exec" data-exec="app/down"></i><i class="fa fa-times-circle exec" data-exec="app/remove"></i>{{ m.name }}<div style="margin-top:5px"><i class="fa fa-folder"></i>{{ if m.path }}{{ m.path }}{{ else }}No local path{{ fi }}</div><div><i class="fa fa-globe"></i>{{ m.url }}</div></div>
+					<div data-url="{{ m.url }}" data-index="{{ $index }}" class="app exec" data-exec="app/go"><i class="fa fa-chevron-up exec" data-exec="app/up"></i><i class="fa fa-chevron-down exec" data-exec="app/down"></i><i class="fa fa-times-circle exec" data-exec="app/remove"></i><i class="fa fa-pencil exec" data-exec="app/edit"></i>{{ m.name }}<div style="margin-top:5px"><i class="fa fa-folder"></i>{{ if m.path }}{{ m.path }}{{ else }}No local path{{ fi }}</div><div><i class="fa fa-globe"></i>{{ m.url }}</div></div>
 				{{ end }}
 			</script>
 		</div>
 	</div>
 
-	<div data-jc="panel__common.form__if:add;bg:true;title:Add Code Editor;icon:laptop-code;default:codeform.*;width:400;autofocus:true" class="hidden">
-		<div data-jc-scope="codeform" class="padding">
-			<div data-jc="textbox__name__required:true__'Work'" class="m">Name</div>
-			<div data-jc="textbox__url__required:true;type:url__'https://'" class="m">URL address</div>
-			<div data-jc="textbox__path__placeholder:/desktop/git/__''" class="m">Path to repositories</div>
-			<div data-jc="validation__?">
-				<button name="submit" disabled="disabled" class="exec button button-small b" data-exec="app/submit"><i class="fa fa-plus-circle"></i>Add code</button>
+	<div data---="panel__common.form__if:add;bg:true;title:Total.js Code Editor;icon:laptop-code;default:codeform.*;width:400;autofocus:true" class="hidden">
+		<div data-scope="codeform" class="padding">
+			<div data---="textbox__?.name__required:true__'Work'" class="m">Name</div>
+			<div data---="textbox__?.url__required:true;type:url__'https://'" class="m">URL address</div>
+			<div data---="textbox__?.path__placeholder:/desktop/git/__''" class="m">Path to repositories</div>
+			<div data---="validation__?">
+				<button name="submit" disabled="disabled" class="exec button button-small b" data-exec="app/submit"><i class="fa fa-floppy-o"></i>Save</button>
 			</div>
 		</div>
 	</div>
 
 	<script>
 
+		CACHEPATH('darkmode', '20 years');
 		CACHEPATH('places', '20 years');
 
 		require('electron').remote.getGlobal('META').url = location.href;
 
 		PLUGIN('app', function(exports) {
+
+			var selectedindex;
 
 			exports.up = function(el, e) {
 
@@ -137,9 +153,23 @@
 
 			exports.submit = function() {
 				SET('common.form', '');
-				codeform.created = NOW;
-				PUSH('places', codeform, true);
+				if (codeform.created) {
+					codeform.updated = NOW;
+					places[selectedindex] = codeform;
+					UPDATE('places');
+				} else {
+					codeform.created = NOW;
+					PUSH('places', codeform, true);
+				}
 				DEFAULT('codeform.*__{}');
+			};
+
+			exports.edit = function(el, e) {
+				e.preventDefault();
+				e.stopPropagation();
+				selectedindex = +el.closest('.app').attrd('index');
+				SET('common.form', 'add');
+				SET('codeform', CLONE(places[selectedindex]), 200);
 			};
 
 			exports.remove = function(el, e) {
