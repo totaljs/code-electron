@@ -27,14 +27,10 @@
 		.appbody i { margin-right: 5px; }
 		.appbody > div { font-size: 11px; color: gray; font-weight: normal; }
 		.appbody > i { margin-right: 0; width: 15px; text-align: center; position: absolute; font-size: 12px; color: gray; }
-		.app .fa-pencil { right: 35px; top: 35px; }
+		.app .fa-pencil { right: 35px; top: 40px; }
 		.app .fa-pencil:hover { color: #9AD959; }
-		.app .fa-times-circle { right: 15px; top: 35px; color: #9B5F5F; }
+		.app .fa-times-circle { right: 15px; top: 40px; color: #9B5F5F; }
 		.app .fa-times-circle:hover { color: red; }
-		.app .fa-chevron-up { right: 15px; top: 17px; }
-		.app .fa-chevron-up:hover { color: #9AD959; }
-		.app .fa-chevron-down { right: 15px; top: 53px; }
-		.app .fa-chevron-down:hover { color: #9AD959; }
 		.ui-dark .app { border-bottom-color: #303030; }
 		.ui-dark .app > i { color: #A0A0A0; }
 		.body img { margin: 0 auto; display: block; }
@@ -53,7 +49,7 @@
 		.m { margin-bottom: 20px; }
 		hr { border-color: #E0E0E0; }
 		.ui-dark hr { border-color: #404040; }
-		body { user-select: none; -webkit-user-select: none; -webkit-app-region: drag; }
+		body { user-select: none; }
 		.center { text-align: center; }
 		.darkmode { position: fixed; right: 20px; top: 20px; }
 		.apps { margin-left: 5px; }
@@ -72,25 +68,31 @@
 	</div>
 
 	<div class="maxwidth">
-		<br />
-		<br />
-		<div class="center">
-			<a href="https://www.totaljs.com" target="_blank"><img src="icon.png" width="150" alt="Total.js Code" border="0" /></a>
-		</div>
+		<div style="-webkit-user-select:none-webkit-app-region:drag">
+			<br />
+			<br />
+			<div class="center">
+				<a href="https://www.totaljs.com" target="_blank"><img src="icon.png" width="150" alt="Total.js Code" border="0" /></a>
+			</div>
 
-		<h1>Total.js <b>Code Editor</b></h1>
-		<div class="center"><span class="link exec" data-path="common.form" data-value="'add'"><i class="fa fa-plus-circle"></i>Add Code Editor</span></div>
-		<hr style="border-style:dashed;margin:30px 0" />
-		<div data-bind="places__template" class="apps">
-			<script type="text/html">
-				{{ foreach m in value }}
-					<div data-url="{{ m.url }}" data-index="{{ $index }}" class="app exec" data-exec="app/go"><div class="appbody"><i class="fa fa-chevron-up exec" data-exec="app/up"></i><i class="fa fa-chevron-down exec" data-exec="app/down"></i><i class="fa fa-times-circle exec" data-exec="app/remove"></i><i class="fa fa-pencil exec" data-exec="app/edit"></i>{{ m.name }}<div style="margin-top:5px"><i class="fa fa-folder"></i>{{ if m.path }}{{ m.path }}{{ else }}No local path{{ fi }}</div><div><i class="fa fa-globe"></i>{{ m.url }}</div></div></div>
-				{{ end }}
-			</script>
+			<h1>Total.js <b>Code Editor</b></h1>
+			<div class="center"><span class="link exec" data-path="common.form" data-value="'add'"><i class="fa fa-plus-circle"></i>Add Code Editor</span></div>
+			<hr style="border-style:dashed;margin:30px 0" />
 		</div>
-		<br />
-		<br />
-		<br />
+		<div data---="movable__null__selector:.app;exec:app/sort">
+			<div data-bind="places__template" class="apps">
+				<script type="text/html">
+					{{ foreach m in value }}
+						<div data-url="{{ m.url }}" draggable="true" data-index="{{ $index }}" class="app exec" data-exec="app/go"><div class="appbody"><i class="fa fa-times-circle exec" data-exec="app/remove"></i><i class="fa fa-pencil exec" data-exec="app/edit"></i>{{ m.name }}<div style="margin-top:5px"><i class="fa fa-folder"></i>{{ if m.path }}{{ m.path }}{{ else }}No local path{{ fi }}</div><div><i class="fa fa-globe"></i>{{ m.url }}</div></div></div>
+					{{ end }}
+				</script>
+			</div>
+		</div>
+		<div style="-webkit-user-select:none;-webkit-app-region:drag">
+			<br />
+			<br />
+			<br />
+		</div>
 	</div>
 
 	<div data---="panel__common.form__if:add;bg:true;title:Total.js Code Editor;icon:laptop-code;default:codeform.*;width:400;autofocus:true" class="hidden">
@@ -152,6 +154,18 @@
 				places[index] = b;
 				places[index + 1] = a;
 
+				UPD('places');
+			};
+
+			exports.sort = function(list) {
+				var arr = [];
+				for (var i = 0; i < list.length; i++) {
+					var el = $(list[i]);
+					var url = el.attrd('url');
+					var item = places.findItem('url', url);
+					arr.push(item);
+				}
+				places = arr;
 				UPD('places');
 			};
 
