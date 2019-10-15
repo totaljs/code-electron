@@ -235,7 +235,7 @@
 			exports.remove = function(el, e) {
 				e.stopPropagation();
 				e.preventDefault();
-				var index = +el.parent().attrd('index');
+				var index = +el.closest('.app').attrd('index');
 				places.splice(index, 1);
 				UPD('places');
 			};
