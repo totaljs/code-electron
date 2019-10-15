@@ -76,7 +76,7 @@
 				<a href="https://www.totaljs.com" target="_blank"><img src="icon.png" width="150" alt="Total.js Code" border="0" /></a>
 			</div>
 			<h1>Total.js <b>Code Editor Online</b></h1>
-			<div class="center"><span class="link exec" data-path="common.form" data-value="'add'"><i class="fa fa-plus-circle"></i>Add Code Editor</span> &nbsp; <span class="link exec" data-exec="app/export"><i class="fa fa-cloud-upload"></i>Export &amp; Import</span></div>
+			<div class="center"><span class="link exec" data-exec="app/create"><i class="fa fa-plus-circle"></i>Add Code Editor</span> &nbsp; <span class="link exec" data-exec="app/export"><i class="fa fa-cloud-upload"></i>Export &amp; Import</span></div>
 			<hr style="border-style:dashed;margin:30px 0" />
 		</div>
 		<div data---="movable__null__selector:.app;exec:app/sort">
@@ -104,7 +104,7 @@
 		</div>
 	</div>
 
-	<div data---="panel__common.form__if:add;bg:true;title:Total.js Code Editor;icon:laptop-code;default:codeform.*;width:400;autofocus:true" class="hidden">
+	<div data---="panel__common.form__if:add;bg:true;title:Total.js Code Editor;icon:laptop-code;width:400;autofocus:true" class="hidden">
 		<div data-scope="codeform" class="padding">
 			<div data---="textbox__?.name__required:true__'Work'" class="m">Name</div>
 			<div data---="textbox__?.url__required:true;type:url__'https://'" class="m">URL address</div>
@@ -149,6 +149,11 @@
 			exports.export = function() {
 				SETR('codeformexport.data', places.length ? ENCRYPT(places, 'totaljscode') : '');
 				SET('common.form', 'codeformexport');
+			};
+
+			exports.create = function() {
+				SET('common.form', 'add');
+				SETR('codeform', {}, 200);
 			};
 
 			exports.import = function() {
