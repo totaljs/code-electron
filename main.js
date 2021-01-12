@@ -26,6 +26,14 @@ electron.ipcMain.on('getPath', function(e, arg) {
 	e.returnValue = cache[arg.url] || '';
 });
 
+electron.ipcMain.on('setUrl', function(e, arg) {
+	global.META.url = arg;
+});
+
+electron.ipcMain.on('getMeta', function(e) {
+	e.returnValue = global.META;
+});
+
 global.META = {
 	version: 1
 };
@@ -36,7 +44,7 @@ process.env.ELECTRON_ENABLE_SECURITY_WARNINGS = false;
 function createWindow () {
 	var mainWindowState = windowStateKeeper('main');
 	//  frame: false
-	var window = new BrowserWindow({ autoHideMenuBar: true, frame: true, titleBarStyle: 'hidden', icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, transparent: false, webPreferences: { backgroundThrottling: false, nodeIntegration: true, nativeWindowOpen: true, webviewTag: true }});
+	var window = new BrowserWindow({ autoHideMenuBar: true, frame: true, titleBarStyle: 'hidden', icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, transparent: false, webPreferences: { contextIsolation: false, nodeIntegration: true, nativeWindowOpen: true, webviewTag: true }});
 	window.setBackgroundColor('#202020');
 	window && (window.ELECTRON_DISABLE_SECURITY_WARNINGS = true);
 	window && (window.ELECTRON_ENABLE_SECURITY_WARNINGS = false);
@@ -118,7 +126,7 @@ function createWindow () {
 			submenu: [
 				{ role: 'forcereload' },
 				{ type: 'separator' },
-				{ label: 'Developer tools', accelerator: 'F12', click: function() { mainWindow.toggleDevTools() }},
+				{ label: 'Developer tools', accelerator: 'F12', click: function() { mainWindow.toggleDevTools(); }},
 				{ type: 'separator' },
 				{ role: 'togglefullscreen' }
 			]
