@@ -174,10 +174,12 @@
 
 		// require('electron').remote.getGlobal('META').url = location.href;
 
-		if (Electron.remote)
-			Electron.remote.META.url = location.href;
-		else
-			Electron.ipcRenderer.sendSync('setUrl', location.href);
+		ON('ready', function() {
+			if (Electron.remote && Electron.remote.META)
+				Electron.remote.META.url = location.href;
+			else
+				Electron.ipcRenderer.send('setUrl', location.href);
+		});
 
 		PLUGIN('app', function(exports) {
 

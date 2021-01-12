@@ -42,157 +42,160 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 process.env.ELECTRON_ENABLE_SECURITY_WARNINGS = false;
 
 function createWindow () {
-	var mainWindowState = windowStateKeeper('main');
-	//  frame: false
-	var window = new BrowserWindow({ autoHideMenuBar: true, frame: true, titleBarStyle: 'hidden', icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, transparent: false, webPreferences: { contextIsolation: false, nodeIntegration: true, nativeWindowOpen: true, webviewTag: true }});
-	window.setBackgroundColor('#202020');
-	window && (window.ELECTRON_DISABLE_SECURITY_WARNINGS = true);
-	window && (window.ELECTRON_ENABLE_SECURITY_WARNINGS = false);
 
-	mainWindowState.track(window);
+	windowStateKeeper('main', function(mainWindowState) {
 
-	window.on('closed', function () {
-		if (mainWindow == this)
-			mainWindow = null;
+		var window = new BrowserWindow({ autoHideMenuBar: true, frame: true, titleBarStyle: 'hidden', icon: __dirname + '/icon.png', x: mainWindowState.x, y: mainWindowState.y, width: mainWindowState.width, height: mainWindowState.height, transparent: false, webPreferences: { contextIsolation: false, nodeIntegration: true, nativeWindowOpen: true, webviewTag: true, enableRemoteModule: true }});
+		window.setBackgroundColor('#202020');
+		window && (window.ELECTRON_DISABLE_SECURITY_WARNINGS = true);
+		window && (window.ELECTRON_ENABLE_SECURITY_WARNINGS = false);
+		// window.webContents.openDevTools();
+		mainWindowState.track(window);
+
+		window.on('closed', function () {
+			if (mainWindow == this)
+				mainWindow = null;
+		});
+
+		window.webContents.on('new-window', function(e, url, frameName, disposition, options) {
+			e.preventDefault();
+			if (url.indexOf('/api/download/') !== -1 && url.indexOf('?path') !== -1) {
+				Object.assign(options, { width: 1280, height: 768, modal: false });
+				windowStateKeeper('preview', function(mws) {
+					options.autoHideMenuBar = true;
+					options.x = mws.x;
+					options.y = mws.y;
+					options.width = mws.width;
+					options.height = mws.height;
+					e.newGuest = new BrowserWindow(options);
+					mws.track(e.newGuest);
+				});
+			} else
+				open(url);
+		});
+
+		window.on('focus', function () {
+			mainWindow = this;
+		});
+
+		mainWindow = window;
+		mainWindow.setMenuBarVisibility(false);
+		window.loadFile('index.html');
+
+		var isMac = process.platform === 'darwin';
+
+		const template = [
+			// { role: 'appMenu' }
+			...(isMac ? [{
+				label: app.getName(),
+				submenu: [
+					// { role: 'about' },
+					// { type: 'separator' },
+					{ role: 'services' },
+					{ type: 'separator' },
+					{ label: 'New window', accelerator: 'CmdOrCtrl+N', click: function() { createWindow(); }},
+					{ type: 'separator' },
+					{ role: 'hide' },
+					{ role: 'hideothers' },
+					{ role: 'unhide' },
+					{ type: 'separator' },
+					{ role: 'quit' }
+				]
+			}] : []),
+			{
+				label: 'Edit',
+				submenu: [
+					{ role: 'undo' },
+					{ role: 'redo' },
+					{ type: 'separator' },
+					{ role: 'cut' },
+					{ role: 'copy' },
+					{ role: 'paste' },
+					...(isMac ? [
+						{ role: 'delete' },
+						{ type: 'separator' },
+						{ role: 'selectAll' }
+					] : [
+						{ role: 'delete' },
+						{ type: 'separator' },
+						{ role: 'selectAll' }
+					])
+				]
+			},
+			// { role: 'viewMenu' }
+			{
+				label: 'View',
+				submenu: [
+					{ role: 'forcereload' },
+					{ type: 'separator' },
+					{ label: 'Developer tools', accelerator: 'F12', click: function() { mainWindow.toggleDevTools(); }},
+					{ type: 'separator' },
+					{ role: 'togglefullscreen' }
+				]
+			},
+			{ role: 'windowMenu' },
+			/*
+			{
+				label: 'Window',
+				submenu: [
+					{ role: 'minimize' },
+					{ role: 'zoom' },
+					...(isMac ? [
+						{ type: 'separator' },
+						{ role: 'front' },
+						{ type: 'separator' },
+						{ role: 'window' }
+					] : [
+						{ role: 'close' }
+					])
+				]
+			},*/
+			{
+				role: 'help',
+				submenu: [
+
+					{
+						label: 'Documentation',
+						click () { electron.shell.openExternalSync('https://wiki.totaljs.com/code/01-welcome/'); }
+					},
+					{
+						label: 'Total.js Platform',
+						click () { electron.shell.openExternalSync('https://www.totaljs.com/'); }
+					},
+					{
+						label: 'Contact us',
+						click () { electron.shell.openExternalSync('https://www.totaljs.com/contact/'); }
+					},
+					{
+						label: 'Support',
+						click () { electron.shell.openExternalSync('https://www.totaljs.com/support/'); }
+					}
+				]
+			}
+		];
+
+		Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 	});
-
-	window.webContents.on('new-window', function(e, url, frameName, disposition, options) {
-		e.preventDefault();
-		if (url.indexOf('/api/download/') !== -1 && url.indexOf('?path') !== -1) {
-			Object.assign(options, { width: 1280, height: 768, modal: false });
-			var mws = windowStateKeeper('preview');
-			options.autoHideMenuBar = true;
-			options.x = mws.x;
-			options.y = mws.y;
-			options.width = mws.width;
-			options.height = mws.height;
-			e.newGuest = new BrowserWindow(options);
-			mws.track(e.newGuest);
-		} else
-			open(url);
-	});
-
-	window.on('focus', function () {
-		mainWindow = this;
-	});
-
-	mainWindow = window;
-	mainWindow.setMenuBarVisibility(false);
-	window.loadFile('index.html');
-
-	var isMac = process.platform === 'darwin';
-
-	const template = [
-		// { role: 'appMenu' }
-		...(isMac ? [{
-			label: app.getName(),
-			submenu: [
-				// { role: 'about' },
-				// { type: 'separator' },
-				{ role: 'services' },
-				{ type: 'separator' },
-				{ label: 'New window', accelerator: 'CmdOrCtrl+N', click: function() { createWindow(); }},
-				{ type: 'separator' },
-				{ role: 'hide' },
-				{ role: 'hideothers' },
-				{ role: 'unhide' },
-				{ type: 'separator' },
-				{ role: 'quit' }
-			]
-		}] : []),
-		{
-			label: 'Edit',
-			submenu: [
-				{ role: 'undo' },
-				{ role: 'redo' },
-				{ type: 'separator' },
-				{ role: 'cut' },
-				{ role: 'copy' },
-				{ role: 'paste' },
-				...(isMac ? [
-					{ role: 'delete' },
-					{ type: 'separator' },
-					{ role: 'selectAll' }
-				] : [
-					{ role: 'delete' },
-					{ type: 'separator' },
-					{ role: 'selectAll' }
-				])
-			]
-		},
-		// { role: 'viewMenu' }
-		{
-			label: 'View',
-			submenu: [
-				{ role: 'forcereload' },
-				{ type: 'separator' },
-				{ label: 'Developer tools', accelerator: 'F12', click: function() { mainWindow.toggleDevTools(); }},
-				{ type: 'separator' },
-				{ role: 'togglefullscreen' }
-			]
-		},
-		{ role: 'windowMenu' },
-		/*
-		{
-			label: 'Window',
-			submenu: [
-				{ role: 'minimize' },
-				{ role: 'zoom' },
-				...(isMac ? [
-					{ type: 'separator' },
-					{ role: 'front' },
-					{ type: 'separator' },
-					{ role: 'window' }
-				] : [
-					{ role: 'close' }
-				])
-			]
-		},*/
-		{
-			role: 'help',
-			submenu: [
-
-				{
-					label: 'Documentation',
-					click () { electron.shell.openExternalSync('https://wiki.totaljs.com/code/01-welcome/'); }
-				},
-				{
-					label: 'Total.js Platform',
-					click () { electron.shell.openExternalSync('https://www.totaljs.com/'); }
-				},
-				{
-					label: 'Contact us',
-					click () { electron.shell.openExternalSync('https://www.totaljs.com/contact/'); }
-				},
-				{
-					label: 'Support',
-					click () { electron.shell.openExternalSync('https://www.totaljs.com/support/'); }
-				}
-			]
-		}
-	];
-
-	Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
-function windowStateKeeper(windowName) {
+function windowStateKeeper(windowName, callback) {
 
 	let window, windowState;
 
-	function setBounds() {
+	function setBounds(callback) {
 		// Restore from appConfig
 		if (appConfig.has(`windowState.${windowName}`)) {
-			windowState = appConfig.get(`windowState.${windowName}`);
+			appConfig.get(`windowState.${windowName}`).then(callback);
 			return;
 		}
 		// Default
-		windowState = { x: undefined, y: undefined, width: 1000, height: 800 };
+		var tmp = { x: undefined, y: undefined, width: 1000, height: 800 };
+		callback(tmp);
 	}
 
 	function saveState() {
-		if (!windowState.isMaximized) {
+		if (!windowState.isMaximized)
 			windowState = window.getBounds();
-		}
 		windowState.isMaximized = window.isMaximized();
 		appConfig.set(`windowState.${windowName}`, windowState);
 	}
@@ -204,8 +207,11 @@ function windowStateKeeper(windowName) {
 		});
 	}
 
-	setBounds();
-	return({ x: windowState.x, y: windowState.y, width: windowState.width, height: windowState.height, isMaximized: windowState.isMaximized, track });
+	setBounds(function(w) {
+		windowState = w;
+		callback({ x: windowState.x, y: windowState.y, width: windowState.width, height: windowState.height, isMaximized: windowState.isMaximized, track });
+	});
+
 }
 
 app.on('ready', createWindow);
