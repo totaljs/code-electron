@@ -83,6 +83,8 @@ function createWindow () {
 		window.loadFile('index.html');
 
 		var isMac = process.platform === 'darwin';
+		if (mainWindowState.isMaximized)
+			setTimeout(() => window.maximize(), 500);
 
 		const template = [
 			// { role: 'appMenu' }
