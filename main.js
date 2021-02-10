@@ -158,19 +158,19 @@ function createWindow () {
 
 					{
 						label: 'Documentation',
-						click () { electron.shell.openExternalSync('https://wiki.totaljs.com/code/01-welcome/'); }
+						click () { electron.shell.openExternal('https://docs.totaljs.com/code/'); }
 					},
 					{
 						label: 'Total.js Platform',
-						click () { electron.shell.openExternalSync('https://www.totaljs.com/'); }
+						click () { electron.shell.openExternal('https://www.totaljs.com/'); }
 					},
 					{
 						label: 'Contact us',
-						click () { electron.shell.openExternalSync('https://www.totaljs.com/contact/'); }
+						click () { electron.shell.openExternal('https://www.totaljs.com/contact/'); }
 					},
 					{
 						label: 'Support',
-						click () { electron.shell.openExternalSync('https://www.totaljs.com/support/'); }
+						click () { electron.shell.openExternal('https://www.totaljs.com/support/'); }
 					}
 				]
 			}
