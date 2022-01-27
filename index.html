@@ -77,6 +77,7 @@
 
 	<div data---="clipboard"></div>
 	<div data---="shortcuts"></div>
+	<div data---="notify__null__position:bottom right"></div>
 
 	<div class="maxwidth movable">
 		<div>
@@ -241,6 +242,7 @@
 
 			exports.copy = function() {
 				SETTER('clipboard/copy', codeformexport.data);
+				SETTER('notify/success', 'Copied ...');
 			};
 
 			exports.import = function() {
@@ -428,9 +430,7 @@
 
 		setTimeout(function() {
 			WATCH('places', function() {
-				W.backup && require('fs').writeFile(W.backup, ENCRYPT(places, 'totaljscode'), function(err) {
-					console.log('SAVED', err);
-				});
+				W.backup && require('fs').writeFile(W.backup, ENCRYPT(places, 'totaljscode'), ASETTER('notify/response', 'Saved...'));
 			});
 		}, 1000);
 	</script>
