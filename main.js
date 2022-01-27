@@ -210,7 +210,7 @@ function windowStateKeeper(windowName, callback) {
 	}
 
 	setBounds(function(w) {
-		windowState = w;
+		windowState = w || {};
 		callback({ x: windowState.x, y: windowState.y, width: windowState.width, height: windowState.height, isMaximized: windowState.isMaximized, track });
 	});
 
