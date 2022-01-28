@@ -77,6 +77,7 @@
 
 	<div data---="clipboard"></div>
 	<div data---="shortcuts"></div>
+	<div data---="approve"></div>
 	<div data---="notify__null__position:bottom right"></div>
 
 	<div class="maxwidth movable">
@@ -114,20 +115,27 @@
 			<br />
 			<br />
 			<div data---="movable__null__selector:.app;exec:app/sort">
-				<div data---="search__%search__selector:.app">
-					<div data-bind="places__template:.app__changes__exec:app/status" class="apps">
-						<script type="text/html">
-							{{ foreach m in value }}
-								<div data-url="{{ m.url }}" draggable="true" data-index="{{ $index }}" class="app exec{{ if m.disabled }} disabled{{ fi }}" data-exec="app/go" data-search="{{ m.name }}">
-									<div class="appbody">
-										<i class="fa fa-trash-alt exec" data-exec="app/remove"></i><i class="fa fa-pencil exec" data-exec="app/edit"></i>{{ m.url | cloudicon }}{{ m.name }}
-										<div style="margin-top:5px"><i class="fa fa-folder"></i>{{ if m.path }}{{ m.path }}{{ else }}No local path{{ fi }}</div>
-										<div><i class="fa fa-globe"></i>{{ m.url }}</div>
-										<div class="version" data-url="{{ m.url }}"><i class="far fa-circle"></i>---</div>
+				<div data---="empty__places__parent:auto;margin:100">
+
+					<script type="text/html">
+						You don't have registered any Total.js Code Editor instance.
+					</script>
+
+					<div data---="search__%search__selector:.app">
+						<div data-bind="places__template:.app__changes__exec:app/status" class="apps">
+							<script type="text/html">
+								{{ foreach m in value }}
+									<div data-url="{{ m.url }}" draggable="true" data-index="{{ $index }}" class="app exec{{ if m.disabled }} disabled{{ fi }}" data-exec="app/go" data-search="{{ m.name }}">
+										<div class="appbody">
+											<i class="fa fa-trash-alt exec" data-exec="app/remove"></i><i class="fa fa-pencil exec" data-exec="app/edit"></i>{{ m.url | cloudicon }}{{ m.name }}
+											<div style="margin-top:5px"><i class="fa fa-folder"></i>{{ if m.path }}{{ m.path }}{{ else }}No local path{{ fi }}</div>
+											<div><i class="fa fa-globe"></i>{{ m.url }}</div>
+											<div class="version" data-url="{{ m.url }}"><i class="far fa-circle"></i>---</div>
+										</div>
 									</div>
-								</div>
-							{{ end }}
-						</script>
+								{{ end }}
+							</script>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -144,7 +152,7 @@
 			<div class="padding">
 				<div data---="input__?.data__required:true;height:200;type:multiline">Data</div>
 				<div class="help m"><span class="exec link" data-exec="app/copy"><i class="fa fa-copy"></i>Copy to clipboard</span></div>
-				<div data---="input__backup__placheholder:/path/to/dropbox/code.txt"><b>Path for auto-backup</b></div>
+				<div data---="input__backup__placeholder:/path/to/dropbox/code.txt"><b>Path for auto-backup</b></div>
 				<div class="help" style="min-height:22px;line-height:16px">All Total.js Code Editor instances will be backed up on the defined absolute path. <span data-bind="backup__exec:showhide" class="green ml5 b hidden"><i class="fa fa-save mr5"></i>Path successfully saved</span></div>
 			</div>
 			<nav data---="validate__?">
@@ -189,8 +197,8 @@
 			AJAX('POST https://visitors.trackomator.com/track/code/', PARSE(myuid));
 		});
 
+		CACHEPATH('darkmode__false', '20 years');
 		CACHEPATH('places', '20 years');
-		CACHEPATH('darkmode_false', '20 years');
 		CACHEPATH('backup', '20 years');
 
 		// require('electron').remote.getGlobal('META').url = location.href;
@@ -316,19 +324,29 @@
 			exports.edit = function(el, e) {
 				e.preventDefault();
 				e.stopPropagation();
-				selectedindex = +el.closest('.app').attrd('index');
+				var url = el.closest('.app').attrd('url');
 				SET('common.form', 'add');
-				SET('codeform', CLONE(places[selectedindex]), 200);
+				SET('codeform', CLONE(places.findItem('url', url)), 200);
 			};
 
 			exports.remove = function(el, e) {
 				e.stopPropagation();
 				e.preventDefault();
+
 				var container = el.closest('.app');
-				var index = +container.attrd('index');
-				places.splice(index, 1);
-				container.remove();
-				REWRITE2('places', places);
+				var url = container.attrd('url');
+				var index = places.findIndex('url', url);
+				var item = places[index];
+
+				SETTER('approve/show', 'Are you sure you want to remove <b>{0}</b>?'.format(item.name.encode()), '"fa fa-trash-alt" Remove', function() {
+					var container = el.closest('.app');
+					var url = container.attrd('url');
+					var index = places.findIndex('url', url);
+					if (index !== -1)
+						places.splice(index, 1);
+					container.remove();
+					REWRITE2('places', places);
+				});
 			};
 
 			exports.go = function(el) {
