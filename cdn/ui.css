@@ -1,3 +1,7 @@
+:root {
+	--radius: 5px;
+}
+
 .bg-smoke { background-color: #F8F8F8; }
 .ui-dark .bg-smoke { background-color: #282828; }
 
